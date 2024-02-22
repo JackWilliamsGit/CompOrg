@@ -13,6 +13,7 @@ main:
     SUB sp, sp, #4
     STR lr, [sp]
 
+    #Problem 1:
     #Print a prompt
     LDR r0, =prompt1
     BL printf
@@ -28,6 +29,12 @@ main:
     LDR r1, [r1, #0]
     BL printf
 
+    #Problem 2:
+    #Print a prompt
+    
+
+
+
     #Pop the stack record and return
     LDR lr, [sp]
     ADD sp, sp, #4
@@ -37,7 +44,7 @@ main:
     prompt1: .asciz "Enter your age user, we are dying to know\n"
     format1: .asciz "%d"
     num1:    .word 99
-    output1: .asciz "You're %d  years old?? Yikes, someone call an ambulance"
+    output1: .asciz "You're %d  years old?? Yikes, someone call an ambulance\n"
 
 
 #End main
