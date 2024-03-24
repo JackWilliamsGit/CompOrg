@@ -2,8 +2,7 @@
 # Filename:	libConversions.s
 # Author: 	Jack Williams
 # Date: 	3/18/24
-# Purpose:	Implement two functions here that do unit conversions. This will be linked to 
-#		a file containing a main program.
+# Purpose:	
 
 
 # Library rules: Declare the funcitons as static external (labels that are .global and are 
@@ -53,8 +52,9 @@ miles2kilometer:
 # Output: 	r0 - speed in km/h
 kph:
 	#Stack push
-	SUB sp, sp, #4
-	STR lr, [sp]
+	SUB sp, sp, #8
+	STR lr, [sp, #0]
+	STR r4, [sp, #4]
 
 	#Save r0 (hours) in r4
 	MOV r4, r0
@@ -73,6 +73,7 @@ kph:
 	BL __aeabi_idiv
 
 	#Stack pop
+	LDR r4, [sp, #4]
 	LDR lr, [sp, #0]
 	ADD sp, #4
 	MOV pc, lr
