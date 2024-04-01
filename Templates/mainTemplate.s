@@ -47,7 +47,7 @@ main:
 	ADD sp, sp, #4
 	MOV pc, lr
 
-data:
+.data
 	prompt: .asciz " \n" 
 	prompt1: .asciz " \n"
 	prompt2: .asciz " \n"

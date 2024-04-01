@@ -22,49 +22,69 @@ main:
 	BL printf
 	LDR r0, =format
 	LDR r1, =number
-	BL scanf	
-
-	#Without using r1 as a logical variable, do the If statement.
+	BL scanf
 	LDR r0, =number
-	LDR r0, [r0]
-	#If (input <=0x41 && input >=0x51) 
-	CMP r0, #0x41
-	LDRLE r1, =true
-	CMP r0, #0x51
-	LDRGE r2, =true
-	AND r1, r1, r2		// If true, r1=1
+	LDR r0, [r0]	
 
-	#If (input <=0x61 && input >=0x7a)
-	CMP r0, #0x61
-	LDRLE r1
-	MOV r3, #0
-	CMP r0, #0x7a
-	ADDLE r3, r3, #1
-	AND r2, r2, r3		// If true, r2=1
-	ORR r1, r1, r2		// If either are true, r1=1
+	#If (input >= 0x41)
+	MOV r1, #0x41
+	CMP r0, r1
+	BGE Step2
 
-	CMP r1, #1
-	BLT else
-		LDR r0, =output
-		BL printf
-		B endError
-	else:
+	#block for bad input
 	LDR r0, =error
 	BL printf
+	B EndIf
+	
+	Step2:
+	#If (input <= 0x7a)
+	MOV r1, #0x7a
+	CMP r0, r1
+	BLE Step3
 
-	endError:
+	#block for bad input
+	LDR r0, =error
+	BL printf
+	B EndIf
+
+	Step3:
+	#If (input >0x5a)
+	MOV r1, #0x5a
+	CMP r0, r1
+	BGT Step4
+
+	#block for good input
+	LDR r0, =valid
+	BL printf
+	B EndIf
+
+	Step4:
+	MOV r1, #0x61
+	CMP r0, r1
+	BGE ValidInput
+
+	#block for bad input
+	LDR r0, =error
+	BL printf
+	B EndIf
+
+	ValidInput:
+	LDR r0, =valid
+	BL printf
+
+
+	EndIf:
 	
 	#Pop the stack
 	LDR lr, [sp, #0]
 	ADD sp, sp, #4
 	MOV pc, lr
-data:
+.data
 	prompt: .asciz "Enter a single character input. I'll tell you if it was an alphabetical char or not. \n" 
 	error: .asciz "Not an alphabetical character! \n"
-	output: .asciz "You entered a character! \n"
-	format: .asciz "%d"
-	number: .word 0
-	true: .asciz "true"
+	valid: .asciz "You entered a character! \n"
+	format: .asciz "%s"
+	number: .space 40
 
 #endmain
 
