@@ -10,49 +10,63 @@
 .global main
 
 main:
-	#push the stack
+	#Push the stack
 	SUB sp, sp, #4
 	STR lr, [sp, #0]
 
-	#Print the prompt
-	LDR r0, =prompt
+	#Prompr, read and print number
+	LDR r0, =promptNum
 	BL printf
-
-	#prompt user to enter number
-	LDR r0, =prompt1
-	BL printf
-
-	#scanf, then store number in r4
-	LDR r0, =inputFormat
-	SUB sp, sp, #4
-	MOV r1, sp
-	BL scanf
-	LDR r4, [sp, #0]
-	ADD sp, sp, #4
-
-	#prompt user to enter number 2
-	LDR r0, =prompt2
-	BL printf
-
-	#scan for user input, then store number 2 in r5
-	LDR r0, =inputFormat
-	SUB sp, sp, #4
-	MOV r1, sp
+	LDR r0, =formatNum
+	LDR r1, =number
 	BL scanf	
-	LDR r5, [sp, #0]
-	ADD sp, sp, #4
+	LDR r0, =formatOutNum
+	LDR r1, =number
+	LDR r1, [r1, #0]
+	BL printf
+	
+	#Prompt, read and print string
+	LDR r0, =promptStr
+	BL printf
+	LDR r0, =formatStr
+	LDR r1, =name
+	BL scanf
+	LDR r0, =formatOutStr
+	LDR r1, =name
+	BL printf	
 
-	#pop the stack
+	#Pop the stack
 	LDR lr, [sp, #0]
 	ADD sp, sp, #4
 	MOV pc, lr
 
-.data
-	prompt: .asciz " \n" 
-	prompt1: .asciz " \n"
-	prompt2: .asciz " \n"
-	prompt3: .asciz " \n"
-	inputFormat: .asciz "%d"
-	inputNum: .word 0
+data:
+	promptNum: .asciz "Enter your number \n" 
+	promptStr: .asciz "Enter your name \n"
+	formatNum: .asciz "%d"
+	formatStr: .asciz "%s"
+	number: .word 0
+	name: .space 40
+	formatOutNum: .asciz "Your number is %d"
+	formatOutStr: .asciz "Your name is %s"
 
 #endmain
+
+
+.text
+functionName:
+	#Push the stack
+	SUB sp, sp, #4
+	STR lr, [sp, #0]
+	#Also push r4-r12 if they will be used.
+
+
+
+	#Pop the stack
+	LDR lr, [sp, #0]
+	ADD sp, sp, #4
+	MOV pc, lr
+.data
+
+#endfunctionName
+
